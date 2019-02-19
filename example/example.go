@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/intel-go/cpuid"
+	"github.com/anight/cpuid"
 )
 
 func main() {
