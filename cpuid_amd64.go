@@ -96,7 +96,7 @@ func leaf1() {
 	InitialAPICId = (ebx >> 24)
 
 	// Parse ECX & EDX not needed. Ask through HasFeature function
-	featureFlags = (uint64(edx) << 32) | uint64(ecx)
+	featureFlags = FeatureType((uint64(edx) << 32) | uint64(ecx))
 }
 
 func leaf2() {
@@ -201,13 +201,13 @@ func leaf6() {
 	}
 
 	eax, ebx, ecx, _ := cpuid_low(6, 0)
-	thermalAndPowerFeatureFlags = (eax & 0xFFFF) | (ecx << 16)
+	thermalAndPowerFeatureFlags = ThermalAndPowerFeatureType((eax & 0xFFFF) | (ecx << 16))
 	ThermalSensorInterruptThresholds = ebx & 7
 }
 
 func leaf7() {
 	_, ebx, ecx, _ := cpuid_low(7, 0)
-	extendedFeatureFlags = (uint64(ecx) << 32) | uint64(ebx)
+	extendedFeatureFlags = ExtendedFeatureType((uint64(ecx) << 32) | uint64(ebx))
 }
 
 func leaf0x80000000() {
@@ -220,7 +220,7 @@ func leaf0x80000001() {
 	}
 	_, _, ecx, edx := cpuid_low(0x80000001, 0)
 	//extendedProcessorSignatureAndFeatureBits := eax
-	extraFeatureFlags = (uint64(edx) << 32) | uint64(ecx)
+	extraFeatureFlags = ExtraFeatureType((uint64(edx) << 32) | uint64(ecx))
 }
 
 // leaf0x80000004 looks at the Processor Brand String in leaves 0x80000002 through 0x80000004

@@ -76,30 +76,35 @@ type CacheDescriptor struct {
 	Partioning int    // partitioning
 }
 
+type FeatureType uint64
+type ExtendedFeatureType uint64
+type ExtraFeatureType uint64
+type ThermalAndPowerFeatureType uint32
+
 // ThermalSensorInterruptThresholds is the number of interrupt thresholds in digital thermal sensor.
 var ThermalSensorInterruptThresholds uint32
 
 // HasFeature to check if features from FeatureNames map are available on the current processor
-func HasFeature(feature uint64) bool {
+func HasFeature(feature FeatureType) bool {
 	return (featureFlags & feature) != 0
 }
 
 // HasExtendedFeature to check if features from ExtendedFeatureNames map are available on the current processor
-func HasExtendedFeature(feature uint64) bool {
+func HasExtendedFeature(feature ExtendedFeatureType) bool {
 	return (extendedFeatureFlags & feature) != 0
 }
 
 // HasExtraFeature to check if features from ExtraFeatureNames map are available on the current processor
-func HasExtraFeature(feature uint64) bool {
+func HasExtraFeature(feature ExtraFeatureType) bool {
 	return (extraFeatureFlags & feature) != 0
 }
 
 // HasThermalAndPowerFeature to check if features from ThermalAndPowerFeatureNames map are available on the current processor
-func HasThermalAndPowerFeature(feature uint32) bool {
+func HasThermalAndPowerFeature(feature ThermalAndPowerFeatureType) bool {
 	return (thermalAndPowerFeatureFlags & feature) != 0
 }
 
-var FeatureNames = map[uint64]string{
+var FeatureNames = map[FeatureType]string{
 	SSE3:         "SSE3",
 	PCLMULQDQ:    "PCLMULQDQ",
 	DTES64:       "DTES64",
@@ -163,7 +168,7 @@ var FeatureNames = map[uint64]string{
 	PBE:          "PBE",
 }
 
-var ThermalAndPowerFeatureNames = map[uint32]string{ // From leaf06
+var ThermalAndPowerFeatureNames = map[ThermalAndPowerFeatureType]string{ // From leaf06
 	ARAT:                      "ARAT",
 	PLN:                       "PLN",
 	ECMD:                      "ECMD",
@@ -181,30 +186,30 @@ var ThermalAndPowerFeatureNames = map[uint32]string{ // From leaf06
 	TURBO_BOOST_MAX:           "TURBO_BOOST_MAX",
 }
 
-var ExtendedFeatureNames = map[uint64]string{ // From leaf07
-	FSGSBASE:        "FSGSBASE",
-	IA32_TSC_ADJUST: "IA32_TSC_ADJUST",
-	BMI1:            "BMI1",
-	HLE:             "HLE",
-	AVX2:            "AVX2",
-	SMEP:            "SMEP",
-	BMI2:            "BMI2",
-	ERMS:            "ERMS",
-	INVPCID:         "INVPCID",
-	RTM:             "RTM",
-	PQM:             "PQM",
-	DFPUCDS:         "DFPUCDS",
-	MPX:             "MPX",
-	PQE:             "PQE",
-	AVX512F:         "AVX512F",
-	AVX512DQ:        "AVX512DQ",
-	RDSEED:          "RDSEED",
-	ADX:             "ADX",
-	SMAP:            "SMAP",
-	AVX512IFMA:      "AVX512IFMA",
-	PCOMMIT:         "PCOMMIT",
-	CLFLUSHOPT:      "CLFLUSHOPT",
-	CLWB:            "CLWB",
+var ExtendedFeatureNames = map[ExtendedFeatureType]string{ // From leaf07
+	FSGSBASE:              "FSGSBASE",
+	IA32_TSC_ADJUST:       "IA32_TSC_ADJUST",
+	BMI1:                  "BMI1",
+	HLE:                   "HLE",
+	AVX2:                  "AVX2",
+	SMEP:                  "SMEP",
+	BMI2:                  "BMI2",
+	ERMS:                  "ERMS",
+	INVPCID:               "INVPCID",
+	RTM:                   "RTM",
+	PQM:                   "PQM",
+	DFPUCDS:               "DFPUCDS",
+	MPX:                   "MPX",
+	PQE:                   "PQE",
+	AVX512F:               "AVX512F",
+	AVX512DQ:              "AVX512DQ",
+	RDSEED:                "RDSEED",
+	ADX:                   "ADX",
+	SMAP:                  "SMAP",
+	AVX512IFMA:            "AVX512IFMA",
+	PCOMMIT:               "PCOMMIT",
+	CLFLUSHOPT:            "CLFLUSHOPT",
+	CLWB:                  "CLWB",
 	INTEL_PROCESSOR_TRACE: "INTEL_PROCESSOR_TRACE",
 	AVX512PF:              "AVX512PF",
 	AVX512ER:              "AVX512ER",
@@ -216,7 +221,7 @@ var ExtendedFeatureNames = map[uint64]string{ // From leaf07
 	AVX512VBMI:            "AVX512VBMI",
 }
 
-var ExtraFeatureNames = map[uint64]string{ // From leaf 8000 0001
+var ExtraFeatureNames = map[ExtraFeatureType]string{ // From leaf 8000 0001
 	LAHF_LM:      "LAHF_LM",
 	CMP_LEGACY:   "CMP_LEGACY",
 	SVM:          "SVM",
@@ -300,10 +305,10 @@ var extendedModelId uint32
 var extendedFamilyId uint32
 var brandIndex uint32
 var brandId int
-var featureFlags uint64
-var thermalAndPowerFeatureFlags uint32
-var extendedFeatureFlags uint64
-var extraFeatureFlags uint64
+var featureFlags FeatureType
+var thermalAndPowerFeatureFlags ThermalAndPowerFeatureType
+var extendedFeatureFlags ExtendedFeatureType
+var extraFeatureFlags ExtraFeatureType
 
 const (
 	UKNOWN = iota
@@ -326,7 +331,7 @@ const (
 )
 
 const (
-	SSE3 = uint64(1) << iota
+	SSE3 = FeatureType(1) << iota
 	PCLMULQDQ
 	DTES64
 	MONITOR
@@ -393,7 +398,7 @@ const (
 )
 
 const (
-	FSGSBASE = uint64(1) << iota
+	FSGSBASE = ExtendedFeatureType(1) << iota
 	IA32_TSC_ADJUST
 	_
 	BMI1
@@ -431,7 +436,7 @@ const (
 )
 
 const (
-	LAHF_LM = uint64(1) << iota
+	LAHF_LM = ExtraFeatureType(1) << iota
 	CMP_LEGACY
 	SVM
 	EXTAPIC
@@ -501,22 +506,22 @@ const (
 // Thermal and Power Management features
 const (
 	// EAX bits 0-15
-	TEMPERATURE_SENSOR        = uint32(1) << iota // Digital temperature sensor
-	TURBO_BOOST                                   // Intel Turbo Boost Technology available
-	ARAT                                          // APIC-Timer-always-running feature is supported if set.
-	_                                             // Reserved
-	PLN                                           // Power limit notification controls
-	ECMD                                          // Clock modulation duty cycle extension
-	PTM                                           // Package thermal management
-	HWP                                           // HWP base registers (IA32_PM_ENABLE[bit 0], IA32_HWP_CAPABILITIES, IA32_HWP_REQUEST, IA32_HWP_STATUS)
-	HWP_NOTIF                                     // IA32_HWP_INTERRUPT MSR
-	HWP_ACTIVITY_WINDOW                           // IA32_HWP_REQUEST[bits 41:32]
-	HWP_ENERGY_PERFORMANCE                        // IA32_HWP_REQUEST[bits 31:24]
-	HWP_PACKAGE_LEVEL_REQUEST                     // IA32_HWP_REQUEST_PKG MSR
-	_                                             // Reserved (eax bit 12)
-	HDC                                           // HDC base registers IA32_PKG_HDC_CTL, IA32_PM_CTL1, IA32_THREAD_STALL MSRs
-	TURBO_BOOST_MAX                               // Intel® Turbo Boost Max Technology
-	_                                             // Reserved (eax bit 15)
+	TEMPERATURE_SENSOR        = ThermalAndPowerFeatureType(1) << iota // Digital temperature sensor
+	TURBO_BOOST                                                       // Intel Turbo Boost Technology available
+	ARAT                                                              // APIC-Timer-always-running feature is supported if set.
+	_                                                                 // Reserved
+	PLN                                                               // Power limit notification controls
+	ECMD                                                              // Clock modulation duty cycle extension
+	PTM                                                               // Package thermal management
+	HWP                                                               // HWP base registers (IA32_PM_ENABLE[bit 0], IA32_HWP_CAPABILITIES, IA32_HWP_REQUEST, IA32_HWP_STATUS)
+	HWP_NOTIF                                                         // IA32_HWP_INTERRUPT MSR
+	HWP_ACTIVITY_WINDOW                                               // IA32_HWP_REQUEST[bits 41:32]
+	HWP_ENERGY_PERFORMANCE                                            // IA32_HWP_REQUEST[bits 31:24]
+	HWP_PACKAGE_LEVEL_REQUEST                                         // IA32_HWP_REQUEST_PKG MSR
+	_                                                                 // Reserved (eax bit 12)
+	HDC                                                               // HDC base registers IA32_PKG_HDC_CTL, IA32_PM_CTL1, IA32_THREAD_STALL MSRs
+	TURBO_BOOST_MAX                                                   // Intel® Turbo Boost Max Technology
+	_                                                                 // Reserved (eax bit 15)
 
 	// ECX bits 0-15
 	HCFC // Hardware Coordination Feedback Capability
