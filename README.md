@@ -81,7 +81,7 @@ for _, cacheDescription := range cpuid.CacheDescriptors {
 * **MonitorIBE bool** Supports treating interrupts as break-event for MWAIT flag
 * **EnabledAVX bool** EnabledAVX flag allows to check if feature AVX is enabled by OS/BIOS
 * **EnabledAVX512 bool** EnabledAVX512 flag allows to check if features AVX512xxx are enabled by OS/BIOS
-* **func HasFeature(feature uint64) bool** to check for the following features:
+* **func HasFeature(feature FeatureType) bool** to check for the following features:
 
   > **SSE3**         Prescott New Instructions-SSE3 (PNI) <br/>
   > **PCLMULQDQ**    PCLMULQDQ support <br/>
@@ -153,7 +153,7 @@ if EnabledAVX && HasFeature(AVX) {
 }
 ```
 
-* **func HasExtendedFeature(feature uint64) bool** to check for the following features:
+* **func HasExtendedFeature(feature ExtendedFeatureType) bool** to check for the following features:
   > **FSGSBASE**                Access to base of %fs and %gs<br/>
   > **IA32_TSC_ADJUST**         IA32_TSC_ADJUST MSR is supported if 1<br/>
   > **BMI1**                    Bit Manipulation Instruction Set 1<br/>
@@ -187,7 +187,7 @@ if EnabledAVX && HasFeature(AVX) {
   > **PREFETCHWT1**             PREFETCHWT1 instruction<br/>
   > **AVX512VBMI**              AVX-512 Vector Bit Manipulation Instructions<br/>
 
-* **func HasExtraFeature(feature uint64) bool**
+* **func HasExtraFeature(feature ExtraFeatureType) bool**
   > **LAHF_LM**           LahfSahf LAHF and SAHF instruction support in 64-bit mod<br/>
   > **CMP_LEGACY**        CmpLegacy Core multi-processing legacy mode.<br/>
   > **SVM**               SVM Secure virtual machine.<br/>
